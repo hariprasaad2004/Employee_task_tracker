@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Employee Task Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- Sidebar -->
+<div class="sidebar">
+<h1>Task Manager</h1>
+<button id="allBtn">Overview</button><br>
+<button id="pendingBtn">Pending</button><br>
+<button id="completedBtn">Completed</button><br>
+</div>
+
+
+<!-- Main Content -->
+<div class="main-content">
+
+
+<div class="task-form" id="taskForm">
+<input type="text" id="taskName" placeholder="Task Name">
+
+<select id="priority">
+<option>Low</option>
+<option>Medium</option>
+<option>High</option>
+</select>
+
+<input type="date" id="dueDate">
+
+<button id="addTaskBtn">Add Task</button>
+</div>
+
+<div id="taskList"></div>
+
+</div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

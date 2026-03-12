@@ -1,0 +1,197 @@
+/* Reset */
+
+body{
+margin:0;
+font-family:Arial, sans-serif;
+}
+
+/* Layout */
+
+.container{
+display:flex;
+min-height:100vh;
+}
+
+/* Sidebar */
+
+.sidebar{
+width:240px;
+background:#3f5872;
+color:white;
+padding:20px;
+}
+
+.sidebar h1{
+margin-bottom:20px;
+}
+
+.sidebar button{
+display:block;
+width:100%;
+padding:10px;
+margin-bottom:12px;
+background:#5b7fa6;
+border:none;
+border-radius:8px;
+color:white;
+cursor:pointer;
+}
+
+.sidebar button:hover{
+background:#5db9e0;
+}
+
+/* Main content */
+
+.main-content{
+flex:1;
+background:#6f93bd;
+padding:25px;
+}
+
+/* Task form layout */
+
+.task-form{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+align-items:center;
+margin-bottom:20px;
+}
+
+/* Input fields */
+
+.task-form input,
+.task-form select{
+padding:8px;
+border:none;
+border-radius:6px;
+background:#b6c0cc;
+width:220px;
+max-width:100%;
+}
+
+/* Date input slightly smaller */
+
+#dueDate{
+width:180px;
+}
+
+/* Add task button */
+
+#addTaskBtn{
+padding:8px 16px;
+border:none;
+background:#5b7fa6;
+color:white;
+border-radius:6px;
+cursor:pointer;
+}
+
+#addTaskBtn:hover{
+background:#5db9e0;
+}
+
+/* Task card */
+
+.task{
+background:white;
+padding:12px;
+margin-top:12px;
+border-radius:8px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+}
+
+/* Task buttons */
+
+.task button{
+margin-right:6px;
+padding:5px 10px;
+border:none;
+border-radius:5px;
+background:#5b7fa6;
+color:white;
+cursor:pointer;
+}
+
+/* Completed task */
+
+.completed{
+text-decoration:line-through;
+color:gray;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width:768px){
+
+/* Stack layout */
+
+.container{
+flex-direction:column;
+min-height:auto;
+}
+
+/* Sidebar becomes top */
+
+.sidebar{
+width:100%;
+padding:15px;
+text-align:center;
+}
+
+/* Sidebar buttons */
+
+.sidebar button{
+width:160px;
+padding:6px;
+font-size:13px;
+margin:6px auto;
+display:block;
+border-radius:6px;
+}
+
+/* Main content padding */
+
+.main-content{
+padding:15px;
+min-height:auto;
+}
+
+/* Form stacked */
+
+.task-form{
+display:flex;
+flex-direction:column;
+align-items:flex-start;
+gap:10px;
+}
+
+/* Inputs responsive */
+
+.task-form input,
+.task-form select{
+width:100%;
+max-width:280px;
+padding:8px;
+}
+
+/* Add button responsive */
+
+#addTaskBtn{
+width:120px;
+padding:8px;
+}
+
+/* Task card stacked */
+
+.task{
+flex-direction:column;
+align-items:flex-start;
+gap:8px;
+}
+
+}
