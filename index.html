@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Employee Task Tracker</title>
+
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Employee Task Tracker</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
@@ -11,19 +16,50 @@
 <div class="container">
 
 <!-- Sidebar -->
+
 <div class="sidebar">
-<h1>Task Manager</h1>
-<button id="allBtn">Overview</button><br>
-<button id="pendingBtn">Pending</button><br>
-<button id="completedBtn">Completed</button><br>
+
+<h2>Task Manager</h2>
+
+<button id="dashboardBtn">Dashboard</button>
+<button id="addTaskNavBtn">Add Task</button>
+<button id="overviewBtn">Overview</button>
+<button id="pendingBtn">Pending</button>
+<button id="completedBtn">Completed</button>
+
 </div>
 
 
 <!-- Main Content -->
+
 <div class="main-content">
 
+<!-- Dashboard Statistics -->
+
+<div class="stats" id="dashboardStats">
+
+<div class="card">
+<h3>Total Tasks</h3>
+<p id="totalTasks">0</p>
+</div>
+
+<div class="card">
+<h3>Pending</h3>
+<p id="pendingTasks">0</p>
+</div>
+
+<div class="card">
+<h3>Completed</h3>
+<p id="completedTasks">0</p>
+</div>
+
+</div>
+
+
+<!-- Task Form -->
 
 <div class="task-form" id="taskForm">
+
 <input type="text" id="taskName" placeholder="Task Name">
 
 <select id="priority">
@@ -35,11 +71,30 @@
 <input type="date" id="dueDate">
 
 <button id="addTaskBtn">Add Task</button>
-</div>
-
-<div id="taskList"></div>
 
 </div>
+
+
+<!-- Task Table -->
+
+<table class="task-table">
+
+<thead>
+<tr>
+<th>Task Name</th>
+<th>Priority</th>
+<th>Status</th>
+<th>Due Date</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="taskList"></tbody>
+
+</table>
+
+</div>
+
 </div>
 
 <script src="script.js"></script>

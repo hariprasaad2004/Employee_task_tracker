@@ -1,86 +1,205 @@
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+let currentView = "dashboard";
+
+const taskList = document.getElementById("taskList");
+const taskForm = document.getElementById("taskForm");
+
 const taskName = document.getElementById("taskName");
 const priority = document.getElementById("priority");
 const dueDate = document.getElementById("dueDate");
-const addTaskBtn = document.getElementById("addTaskBtn");
-const taskList = document.getElementById("taskList");
 
-const allBtn = document.getElementById("allBtn");
-const pendingBtn = document.getElementById("pendingBtn");
-const completedBtn = document.getElementById("completedBtn");
+const dashboardStats = document.getElementById("dashboardStats");
 
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+/* Sidebar buttons */
 
-function saveTasks(){
-localStorage.setItem("tasks", JSON.stringify(tasks));
-}
+document.getElementById("dashboardBtn").onclick = () =>{
+currentView="dashboard";
+renderTasks();
+};
 
-function renderTasks(filter="all"){
+document.getElementById("addTaskNavBtn").onclick = () =>{
+currentView="overview";
+renderTasks();
+};
 
-taskList.innerHTML="";
+document.getElementById("overviewBtn").onclick = () =>{
+currentView="overview";
+renderTasks();
+};
 
-tasks.forEach((task,index)=>{
+document.getElementById("pendingBtn").onclick = () =>{
+currentView="pending";
+renderTasks();
+};
 
-if(filter==="pending" && task.completed) return;
-if(filter==="completed" && !task.completed) return;
+document.getElementById("completedBtn").onclick = () =>{
+currentView="completed";
+renderTasks();
+};
 
-const div=document.createElement("div");
-div.classList.add("task");
 
-if(task.completed){
-div.classList.add("completed");
-}
+/* Add task */
 
-div.innerHTML=`
-<span>
-${task.name} | ${task.priority} | ${task.date}
-</span>
+document.getElementById("addTaskBtn").onclick = () =>{
 
-<div>
-<button onclick="toggleTask(${index})">Completed</button>
-<button onclick="deleteTask(${index})">Quit</button>
-</div>
-`;
+if(taskName.value.trim()==="") return;
 
-taskList.appendChild(div);
-
-});
-
-}
-
-addTaskBtn.addEventListener("click",()=>{
-
-const task={
-name:taskName.value,
+const task = {
+id:Date.now(),
+title:taskName.value,
 priority:priority.value,
-date:dueDate.value,
-completed:false
+dueDate:dueDate.value,
+status:"pending"
 };
 
 tasks.push(task);
 
 saveTasks();
-renderTasks();
 
 taskName.value="";
 dueDate.value="";
 
+renderTasks();
+
+};
+
+/* Save */
+
+function saveTasks(){
+localStorage.setItem("tasks",JSON.stringify(tasks));
+}
+
+/* Complete */
+
+function completeTask(id){
+
+tasks = tasks.map(t=>{
+if(t.id===id){
+t.status="completed";
+}
+return t;
 });
 
-
-function toggleTask(index){
-tasks[index].completed=!tasks[index].completed;
 saveTasks();
 renderTasks();
+
 }
 
-function deleteTask(index){
-tasks.splice(index,1);
+/* Delete */
+
+function deleteTask(id){
+
+tasks = tasks.filter(t=>t.id!==id);
+
 saveTasks();
 renderTasks();
+
 }
 
-allBtn.addEventListener("click",()=>renderTasks("all"));
-pendingBtn.addEventListener("click",()=>renderTasks("pending"));
-completedBtn.addEventListener("click",()=>renderTasks("completed"));
+/* Statistics */
+
+function updateStats(){
+
+document.getElementById("totalTasks").textContent = tasks.length;
+
+document.getElementById("pendingTasks").textContent =
+tasks.filter(t=>t.status==="pending").length;
+
+document.getElementById("completedTasks").textContent =
+tasks.filter(t=>t.status==="completed").length;
+
+}
+
+/* Render */
+
+function renderTasks(){
+
+taskList.innerHTML="";
+
+/* View controls */
+
+if(currentView==="dashboard"){
+taskForm.style.display="none";
+dashboardStats.style.display="flex";
+}
+
+else if(currentView==="overview"){
+taskForm.style.display="flex";
+dashboardStats.style.display="none";
+}
+
+else{
+taskForm.style.display="none";
+dashboardStats.style.display="none";
+}
+
+/* Filter */
+
+let filtered = tasks;
+
+if(currentView==="pending"){
+filtered = tasks.filter(t=>t.status==="pending");
+}
+
+if(currentView==="completed"){
+filtered = tasks.filter(t=>t.status==="completed");
+}
+
+/* Placeholder */
+
+if(filtered.length===0){
+
+const row=document.createElement("tr");
+
+row.innerHTML=`
+<td colspan="5" class="placeholder">
+No tasks available
+</td>
+`;
+
+taskList.appendChild(row);
+
+updateStats();
+
+return;
+
+}
+
+/* Render tasks */
+
+filtered.forEach(t=>{
+
+const row=document.createElement("tr");
+
+row.innerHTML=`
+<td>${t.title}</td>
+
+<td>
+<span class="priority ${t.priority.toLowerCase()}">
+${t.priority}
+</span>
+</td>
+
+<td>${t.status==="completed"?"Completed":""}</td>
+
+<td>${t.dueDate||"-"}</td>
+
+<td>
+${t.status==="pending"
+? `<button class="complete" onclick="completeTask(${t.id})">Complete</button>`
+: ""}
+
+<button class="delete" onclick="deleteTask(${t.id})">Delete</button>
+</td>
+`;
+
+taskList.appendChild(row);
+
+});
+
+updateStats();
+
+}
 
 renderTasks();
