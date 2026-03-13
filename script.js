@@ -11,74 +11,102 @@ const dueDate = document.getElementById("dueDate");
 
 const dashboardStats = document.getElementById("dashboardStats");
 
-/* Sidebar buttons */
+const sidebar = document.getElementById("sidebar");
+const menuBtn = document.getElementById("menuBtn");
+const backBtn = document.getElementById("backBtn");
 
-document.getElementById("dashboardBtn").onclick = () =>{
-currentView="dashboard";
+/* Sidebar toggle */
+
+menuBtn.onclick = () => {
+sidebar.classList.add("active");
+};
+
+backBtn.onclick = () => {
+sidebar.classList.remove("active");
+};
+
+/* Close sidebar automatically on mobile */
+
+function closeSidebarOnMobile() {
+
+if (window.innerWidth <= 1023) {
+sidebar.classList.remove("active");
+}
+
+}
+
+/* Sidebar navigation */
+
+dashboardBtn.onclick = () => {
+currentView = "dashboard";
 renderTasks();
+closeSidebarOnMobile();
 };
 
-document.getElementById("addTaskNavBtn").onclick = () =>{
-currentView="overview";
+addTaskNavBtn.onclick = () => {
+currentView = "addTask";
 renderTasks();
+closeSidebarOnMobile();
 };
 
-document.getElementById("overviewBtn").onclick = () =>{
-currentView="overview";
+overviewBtn.onclick = () => {
+currentView = "overview";
 renderTasks();
+closeSidebarOnMobile();
 };
 
-document.getElementById("pendingBtn").onclick = () =>{
-currentView="pending";
+pendingBtn.onclick = () => {
+currentView = "pending";
 renderTasks();
+closeSidebarOnMobile();
 };
 
-document.getElementById("completedBtn").onclick = () =>{
-currentView="completed";
+completedBtn.onclick = () => {
+currentView = "completed";
 renderTasks();
+closeSidebarOnMobile();
 };
 
+/* Add Task */
 
-/* Add task */
+addTaskBtn.onclick = () => {
 
-document.getElementById("addTaskBtn").onclick = () =>{
+if (taskName.value.trim() === "") return;
 
-if(taskName.value.trim()==="") return;
+tasks.push({
+id: Date.now(),
+title: taskName.value,
+priority: priority.value,
+dueDate: dueDate.value,
+status: "pending"
+});
 
-const task = {
-id:Date.now(),
-title:taskName.value,
-priority:priority.value,
-dueDate:dueDate.value,
-status:"pending"
-};
-
-tasks.push(task);
+taskName.value = "";
+dueDate.value = "";
 
 saveTasks();
-
-taskName.value="";
-dueDate.value="";
-
 renderTasks();
 
 };
 
-/* Save */
+/* Save tasks */
 
-function saveTasks(){
-localStorage.setItem("tasks",JSON.stringify(tasks));
+function saveTasks() {
+localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-/* Complete */
+/* Complete task */
 
-function completeTask(id){
+function completeTask(id) {
 
-tasks = tasks.map(t=>{
-if(t.id===id){
-t.status="completed";
+tasks = tasks.map(t => {
+
+if (t.id === id) {
+t.status = "completed";
 }
+
 return t;
+
 });
 
 saveTasks();
@@ -86,93 +114,95 @@ renderTasks();
 
 }
 
-/* Delete */
+/* Delete task */
 
-function deleteTask(id){
+function deleteTask(id) {
 
-tasks = tasks.filter(t=>t.id!==id);
+tasks = tasks.filter(t => t.id !== id);
 
 saveTasks();
 renderTasks();
 
 }
 
-/* Statistics */
+/* Update statistics */
 
-function updateStats(){
+function updateStats() {
 
 document.getElementById("totalTasks").textContent = tasks.length;
 
 document.getElementById("pendingTasks").textContent =
-tasks.filter(t=>t.status==="pending").length;
+tasks.filter(t => t.status === "pending").length;
 
 document.getElementById("completedTasks").textContent =
-tasks.filter(t=>t.status==="completed").length;
+tasks.filter(t => t.status === "completed").length;
 
 }
 
-/* Render */
+/* Render tasks */
 
-function renderTasks(){
+function renderTasks() {
 
-taskList.innerHTML="";
+taskList.innerHTML = "";
 
-/* View controls */
+/* View control */
 
-if(currentView==="dashboard"){
-taskForm.style.display="none";
-dashboardStats.style.display="flex";
+if (currentView === "dashboard") {
+
+taskForm.style.display = "none";
+dashboardStats.style.display = "grid";
+
 }
 
-else if(currentView==="overview"){
-taskForm.style.display="flex";
-dashboardStats.style.display="none";
+else if (currentView === "addTask") {
+
+taskForm.style.display = "flex";
+dashboardStats.style.display = "none";
+
 }
 
-else{
-taskForm.style.display="none";
-dashboardStats.style.display="none";
+else {
+
+taskForm.style.display = "none";
+dashboardStats.style.display = "none";
+
 }
 
 /* Filter */
 
 let filtered = tasks;
 
-if(currentView==="pending"){
-filtered = tasks.filter(t=>t.status==="pending");
+if (currentView === "pending") {
+filtered = tasks.filter(t => t.status === "pending");
 }
 
-if(currentView==="completed"){
-filtered = tasks.filter(t=>t.status==="completed");
+if (currentView === "completed") {
+filtered = tasks.filter(t => t.status === "completed");
 }
 
 /* Placeholder */
 
-if(filtered.length===0){
+if (filtered.length === 0) {
 
-const row=document.createElement("tr");
-
-row.innerHTML=`
-<td colspan="5" class="placeholder">
-No tasks available
-</td>
+taskList.innerHTML = `
+<tr>
+<td colspan="5">No tasks available</td>
+</tr>
 `;
 
-taskList.appendChild(row);
-
 updateStats();
-
 return;
 
 }
 
-/* Render tasks */
+/* Render rows */
 
-filtered.forEach(t=>{
+filtered.forEach(t => {
 
-const row=document.createElement("tr");
+taskList.innerHTML += `
 
-row.innerHTML=`
+<tr>
+
 <td>${t.title}</td>
 
 <td>
@@ -181,25 +211,29 @@ ${t.priority}
 </span>
 </td>
 
-<td>${t.status==="completed"?"Completed":""}</td>
+<td>${t.status === "completed" ? "Completed" : "Pending"}</td>
 
-<td>${t.dueDate||"-"}</td>
+<td>${t.dueDate || "-"}</td>
 
 <td>
-${t.status==="pending"
-? `<button class="complete" onclick="completeTask(${t.id})">Complete</button>`
+
+${t.status === "pending"
+? `<button onclick="completeTask(${t.id})">Complete</button>`
 : ""}
 
-<button class="delete" onclick="deleteTask(${t.id})">Delete</button>
-</td>
-`;
+<button onclick="deleteTask(${t.id})">Delete</button>
 
-taskList.appendChild(row);
+</td>
+
+</tr>
+`;
 
 });
 
 updateStats();
 
 }
+
+/* Initial render */
 
 renderTasks();

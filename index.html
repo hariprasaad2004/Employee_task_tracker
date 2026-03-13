@@ -17,7 +17,9 @@
 
 <!-- Sidebar -->
 
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
+
+<button id="backBtn" class="back-btn">← Back</button>
 
 <h2>Task Manager</h2>
 
@@ -34,7 +36,13 @@
 
 <div class="main-content">
 
-<!-- Dashboard Statistics -->
+<div class="topbar">
+
+<button id="menuBtn">☰</button>
+
+</div>
+
+<!-- Dashboard -->
 
 <div class="stats" id="dashboardStats">
 
@@ -70,18 +78,20 @@
 
 <input type="date" id="dueDate">
 
-<button id="addTaskBtn">Add Task</button>
+<button id="addTaskBtn">Save Task</button>
 
 </div>
 
 
 <!-- Task Table -->
 
+<div class="table-wrapper">
+
 <table class="task-table">
 
 <thead>
 <tr>
-<th>Task Name</th>
+<th>Task</th>
 <th>Priority</th>
 <th>Status</th>
 <th>Due Date</th>
@@ -92,6 +102,8 @@
 <tbody id="taskList"></tbody>
 
 </table>
+
+</div>
 
 </div>
 
